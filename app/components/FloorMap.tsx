@@ -4,8 +4,12 @@ import type { Shop } from "@data/interface";
 import ShopInputModal from "./ShopInputModal";
 import ShopInfo from "./ShopInfo";
 import ShopList from "./ShopList";
-import { Button, SegmentButton } from "lumir-design-system-02";
-import { Frame } from "lumir-design-system-shared";
+import { 
+  DynamicButton as Button, 
+  DynamicSegmentButton as SegmentButton, 
+  DynamicTextDisplay as TextDisplay 
+} from "./DynamicComponents";
+import { Frame, Surface } from "lumir-design-system-shared";
 
 const floorKey = (floor: number): "floor1" | "floor2" => {
   return floor === 1 ? "floor1" : "floor2";
@@ -23,14 +27,18 @@ function pointsToString(points: { x: number; y: number }[]): string {
   return points.map((pt) => `${pt.x},${pt.y}`).join(" ");
 }
 
-export default function FloorMap() {
+interface FloorMapProps {
+  isAdminPage?: boolean;
+}
+
+export default function FloorMap({ isAdminPage = false }: FloorMapProps) {
   const [selectedShop, setSelectedShop] = useState<Shop | null>(null);
   const [isDrawerClosed, setIsDrawerClosed] = useState(false);
   const [floor, setFloor] = useState(1);
   const [filters, setFilters] = useState({
-    launch: true,
-    dinner: true,
-    type: "뷔페" as Shop["type"] | "전체",
+    launch: false,
+    dinner: false,
+    type: [] as Shop["type"][],
   });
   const [isDrawing, setIsDrawing] = useState(false);
   const [startPoint, setStartPoint] = useState<{ x: number; y: number } | null>(
@@ -63,18 +71,22 @@ export default function FloorMap() {
     []) as Shop[];
 
   const filteredShops = shops.filter((shop) => {
-    // 시간대 필터링
-    const timeFilter =
-      (filters.launch && shop.availableInLaunch) ||
-      (filters.dinner && shop.availableInDinner);
-
     // 음식 타입 필터링
-    const typeFilter = filters.type === "전체" || shop.type === filters.type;
+    const typeFilter = filters.type.length === 0 || filters.type.includes(shop.type);
+
+    // 시간대 필터링 - OR 조건으로 변경
+    const hasTimeFilter = filters.launch || filters.dinner;
+    let timeFilter = true;
+    if (hasTimeFilter) {
+      const matchesLaunch = filters.launch && shop.availableInLaunch;
+      const matchesDinner = filters.dinner && shop.availableInDinner;
+      timeFilter = matchesLaunch || matchesDinner;
+    }
 
     return timeFilter && typeFilter;
   });
 
-  const handleShopSelect = (shop: Shop) => {
+  const handleShopSelect = (shop: Shop | null) => {
     setSelectedShop(shop);
     setIsDrawerClosed(true);
   };
@@ -89,7 +101,7 @@ export default function FloorMap() {
   };
 
   const handleMouseDown = (e: React.MouseEvent<SVGSVGElement>) => {
-    if (!isAdminMode) return; // 관리자 모드가 아닐 때는 드래그 불가
+    if (!isAdminMode || !isAdminPage) return; // 관리자 모드가 활성화되지 않았거나 관리자 페이지가 아닐 때는 드래그 불가
     if (e.button !== 0) return; // 좌클릭만 허용
 
     const svg = svgRef.current;
@@ -120,7 +132,7 @@ export default function FloorMap() {
   };
 
   const handleMouseMove = (e: React.MouseEvent<SVGSVGElement>) => {
-    if (!isAdminMode) return; // 관리자 모드가 아닐 때는 드래그 불가
+    if (!isAdminMode || !isAdminPage) return; // 관리자 모드가 활성화되지 않았거나 관리자 페이지가 아닐 때는 드래그 불가
     if (!isDrawing || !startPoint) return;
 
     const svg = svgRef.current;
@@ -149,7 +161,7 @@ export default function FloorMap() {
   };
 
   const handleMouseUp = () => {
-    if (!isAdminMode) return;
+    if (!isAdminMode || !isAdminPage) return;
     if (!isDrawing || !startPoint || !currentPoint) return;
     // 좌표를 문자열로 변환
     const points = [
@@ -430,13 +442,8 @@ export default function FloorMap() {
   };
 
   return (
-    <div
-      style={{
-        width: "100%",
-        margin: "0 auto",
-        padding: "0px 20px",
-        color: "var(--text-color)",
-      }}
+    <Frame
+      width="100%"
     >
       <svg
         ref={svgRef}
@@ -444,7 +451,6 @@ export default function FloorMap() {
         style={{
           width: "100%",
           height: "auto",
-          aspectRatio: "5/4",
           maxHeight: "70vh",
           cursor: isAdminMode
             ? isDrawing
@@ -455,7 +461,6 @@ export default function FloorMap() {
               ? "nwse-resize"
               : "pointer"
             : "default",
-          // filter: "var(--svg-filter)",
           background: "#fff",
         }}
         onMouseDown={handleMouseDown}
@@ -574,6 +579,35 @@ export default function FloorMap() {
         )}
       </svg>
 
+      {/* 관리자 모드 안내 문구 */}
+      {isAdminPage && isAdminMode && (
+        <Frame
+          position="absolute"
+          top="20px"
+          left="50%"
+          style={{
+            transform: "translateX(-50%)",
+            zIndex: 1000,
+          }}
+        >
+                                <Surface
+             background="primary-system01-1-rest"
+             borderRadius="md"
+             style={{
+               boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+             }}
+           >
+             <Frame padding="md">
+               <TextDisplay
+                 size="sm"
+                 primaryText="드래그해서 영역을 선택해주세요"
+                 color="primary-system01-1-oncolor"
+               />
+             </Frame>
+           </Surface>
+        </Frame>
+      )}
+
       {/* 층 선택 버튼 */}
       <Frame 
         display="flex" 
@@ -584,7 +618,7 @@ export default function FloorMap() {
         wrap="wrap"
       >
         <Frame flex="1" />
-        {selectedShop && isDrawerClosed && (
+        {selectedShop && isDrawerClosed && !isAdminPage && (
           <button
             onClick={() => setIsDrawerClosed(false)}
             style={{
@@ -613,7 +647,7 @@ export default function FloorMap() {
             variant="primary"
             size="lg"
             selectedValues={[floor.toString()]}
-            onChange={(values) => {
+            onChange={(values: string[]) => {
               if (values.length > 0) {
                 handleFloorChange(parseInt(values[0]));
               }
@@ -622,29 +656,31 @@ export default function FloorMap() {
             <SegmentButton.Item value="1">1층</SegmentButton.Item>
             <SegmentButton.Item value="2">2층</SegmentButton.Item>
           </SegmentButton>
-          {isDevelopment && (
+          {isAdminPage && (
             <Button
               variant={isAdminMode ? "filled" : "outlined"}
-              colorScheme="secondary"
+              colorScheme="primary"
               size="lg"
               onClick={handleAdminModeToggle}
             >
-              관리자
+              새로운 식당 추가하기
             </Button>
           )}
         </Frame>
       </Frame>
 
-      <ShopList
-        shops={filteredShops}
-        selectedShop={selectedShop}
-        onShopSelect={handleShopSelect}
-        floor={floor}
-        filters={filters}
-        onFilterChange={setFilters}
-      />
+      {!isAdminPage && (
+        <ShopList
+          selectedShop={selectedShop}
+          onShopSelect={handleShopSelect}
+          floor={floor}
+          filters={filters}
+          onFilterChange={setFilters}
+          onFloorChange={handleFloorChange}
+        />
+      )}
 
-      {selectedShop && (
+      {selectedShop && !isAdminPage && (
         <ShopInfo
           shop={selectedShop}
           onClose={() => setIsDrawerClosed(true)}
@@ -672,6 +708,6 @@ export default function FloorMap() {
             : undefined
         }
       />
-    </div>
+    </Frame>
   );
 }

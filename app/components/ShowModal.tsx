@@ -1,4 +1,6 @@
 import type { Shop } from "@data/interface";
+import { Frame, Surface } from "lumir-design-system-shared";
+import { DynamicTextDisplay as TextDisplay, DynamicButton as Button } from "./DynamicComponents";
 
 export default function ShopModal({
   shop,
@@ -8,33 +10,72 @@ export default function ShopModal({
   onClose: () => void;
 }) {
   return (
-    <div
-      style={{
-        position: "fixed",
-        top: 312,
-        right: 370,
-        background: "#fff",
-        padding: "20px",
-        border: "2px solid #ddd",
-        zIndex: 1000,
-        borderRadius: 10,
-        height: 250,
-        width: 200,
-      }}
+    <Frame
+      position="fixed"
+      top="312px"
+      right="370px"
+      zIndex={1000}
+      width="200px"
+      height="250px"
     >
-      <h1 style={{ fontSize: 24, fontWeight: 600 }}>{shop.name}</h1>
-      <p>{shop.description}</p>
-      <p>{shop.contact}</p>
-      <p>{shop.menuLinkUrl}</p>
+      <Surface
+        background="secondary-system02-1-rest"
+        borderColor="secondary-system02-2-rest"
+        borderWidth="medium"
+        borderStyle="solid"
+        borderRadius="md"
+    >
+        <Frame padding="lg" display="flex" direction="column" gap="sm" height="100%">
+          <TextDisplay
+            size="lg"
+            primaryText={shop.name}
+            style="left"
+          />
+          
+          <Frame display="flex" direction="column" gap="xs" flex="1">
+            <TextDisplay
+              size="sm"
+              primaryText={shop.description}
+              style="left"
+            />
+            <TextDisplay
+              size="sm"
+              primaryText={shop.contact}
+              style="left"
+            />
+            {shop.menuLinkUrl && (
+              <TextDisplay
+                size="sm"
+                primaryText={shop.menuLinkUrl}
+                style="left"
+              />
+            )}
       {shop.menuList && (
-        <div>
+              <Frame display="flex" direction="column" gap="xs">
           {shop.menuList.map((menu) => (
-            <div key={menu.name}>{menu.name}</div>
+                  <TextDisplay
+                    key={menu.name}
+                    size="sm"
+                    primaryText={menu.name}
+                    style="left"
+                  />
           ))}
-        </div>
+              </Frame>
       )}
+          </Frame>
 
-      <button onClick={onClose}>닫기</button>
-    </div>
+          <Frame>
+            <Button
+              variant="outlined"
+              colorScheme="secondary"
+              size="sm"
+              onClick={onClose}
+            >
+              닫기
+            </Button>
+          </Frame>
+        </Frame>
+      </Surface>
+    </Frame>
   );
 }

@@ -2,6 +2,26 @@ import { NextResponse } from "next/server";
 import fs from "fs/promises";
 import path from "path";
 import type { Shop } from "@data/interface";
+
+export async function GET() {
+  try {
+    const filePath = path.join(process.cwd(), "app/data/shops.json");
+    const fileContent = await fs.readFile(filePath, "utf-8");
+    const shopsData = JSON.parse(fileContent);
+    
+    // floor1과 floor2의 모든 상점을 하나의 배열로 합치기
+    const allShops: Shop[] = [
+      ...(shopsData.floor1 || []),
+      ...(shopsData.floor2 || [])
+    ];
+    
+    return NextResponse.json(allShops);
+  } catch (error) {
+    console.error("Error reading shops:", error);
+    return NextResponse.json({ error: "Failed to read shops" }, { status: 500 });
+  }
+}
+
 export async function POST(request: Request) {
   try {
     const newShop = await request.json();

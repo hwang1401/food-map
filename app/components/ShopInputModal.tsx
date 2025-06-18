@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { Field, Button, TextDisplay } from "lumir-design-system-02";
+import { DynamicField as Field, DynamicButton as Button, DynamicTextDisplay as TextDisplay } from "./DynamicComponents";
+import { Frame, Surface } from "lumir-design-system-shared";
 
 interface ShopInputModalProps {
   open: boolean;
@@ -34,94 +35,92 @@ export default function ShopInputModal({
   if (!open) return null;
   
   return (
-    <div
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        width: "100vw",
-        height: "100vh",
-        background: "rgba(0,0,0,0.3)",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        zIndex: 1000,
-      }}
+    <Frame
+      position="fixed"
+      top="0"
+      left="0"
+      width="100vw"
+      height="100vh"
+      display="flex"
+      align="center"
+      justify="center"
+      zIndex={1000}
       onClick={onClose}
     >
-      <div
-        style={{
-          background: "#fff",
-          borderRadius: 8,
-          padding: 24,
-          minWidth: 400,
-        }}
+      <Frame
+        minWidth="300px"
+        maxWidth="90vw"
         onClick={(e) => e.stopPropagation()}
       >
-        <TextDisplay
-          size="lg"
-          primaryText="상가 정보 입력"
-          style="left"
-        />
-        
-        <div style={{ display: "flex", flexDirection: "column", gap: 16, marginTop: 20 }}>
-          <Field
-            label="상가 이름"
-            placeholder="상가 이름을 입력하세요"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            variant="outlined"
-            size="lg"
-            fieldWidth="fill-width"
-            required
-          />
-          <Field
-            label="설명"
-            placeholder="상가 설명을 입력하세요"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            variant="outlined"
-            size="lg"
-            fieldWidth="fill-width"
-          />
-          <Field
-            label="연락처"
-            placeholder="연락처를 입력하세요"
-            value={contact}
-            onChange={(e) => setContact(e.target.value)}
-            variant="outlined"
-            size="lg"
-            fieldWidth="fill-width"
-            type="tel"
-          />
-        </div>
-        
-        <div
-          style={{
-            display: "flex",
-            gap: 8,
-            marginTop: 24,
-            justifyContent: "flex-end",
-          }}
+        <Surface
+          background="secondary-system02-1-rest"
+          borderRadius="md"
         >
-          <Button
-            variant="outlined"
-            colorScheme="secondary"
-            size="md"
+          <Frame padding="xl">
+            <TextDisplay
+              size="lg"
+              primaryText="상가 정보 입력"
+              style="left"
+            />
+            
+            <Frame display="flex" direction="column" gap="md" marginTop="lg">
+              <Field
+                label="상가 이름"
+                placeholder="상가 이름을 입력하세요"
+            value={name}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
+                variant="outlined"
+                size="lg"
+                fieldWidth="fill-width"
+                required
+          />
+              <Field
+                label="설명"
+                placeholder="상가 설명을 입력하세요"
+            value={description}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDescription(e.target.value)}
+                variant="outlined"
+                size="lg"
+                fieldWidth="fill-width"
+          />
+              <Field
+                label="연락처"
+                placeholder="연락처를 입력하세요"
+            value={contact}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setContact(e.target.value)}
+                variant="outlined"
+                size="lg"
+                fieldWidth="fill-width"
+                type="tel"
+          />
+            </Frame>
+            
+            <Frame
+              display="flex"
+              gap="xs"
+              marginTop="xl"
+              justify="flex-end"
+        >
+              <Button
+                variant="outlined"
+                colorScheme="secondary"
+                size="md"
             onClick={onClose}
           >
             취소
-          </Button>
-          <Button
-            variant="filled"
-            colorScheme="primary"
-            size="md"
+              </Button>
+              <Button
+                variant="filled"
+                colorScheme="primary"
+                size="md"
             onClick={() => onSubmit({ name, description, contact })}
           >
             확인
-          </Button>
-        </div>
-      </div>
-    </div>
+              </Button>
+            </Frame>
+          </Frame>
+        </Surface>
+      </Frame>
+    </Frame>
   );
 }
