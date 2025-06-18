@@ -211,6 +211,8 @@ function FilterBottomSheet({ isOpen, onClose, filters, onFilterChange }: FilterB
               variant="filled"
               colorScheme="primary"
               size="lg"
+              isFullWidth={true}
+              textAlign="center"
               onClick={handleClose}
               children="확인"
             />
@@ -356,7 +358,8 @@ export default function ShopList({
               variant={selectedShop?.id === shop.id ? "outlined" : "filled"}
               title={shop.name}
               description={shop.description}
-              subtitle={`${shopFloor} • ${shop.type} • ${operatingText}`}
+              showCaption={true}
+              captionText={`${shopFloor} • ${shop.type} • ${operatingText}`}
               imageUrl={shop.logoUrl || "/icon-192x192.png"}
               showImage={true}
               showActionButton={false}

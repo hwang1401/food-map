@@ -97,25 +97,29 @@ export default function ShopInputModal({
             
             <Frame
               display="flex"
+              direction="column"
               gap="xs"
               marginTop="xl"
-              justify="flex-end"
         >
-              <Button
-                variant="outlined"
-                colorScheme="secondary"
-                size="md"
-            onClick={onClose}
-          >
-            취소
-              </Button>
               <Button
                 variant="filled"
                 colorScheme="primary"
                 size="md"
+                isFullWidth={true}
+                textAlign="center"
             onClick={() => onSubmit({ name, description, contact })}
           >
             확인
+              </Button>
+              <Button
+                variant="outlined"
+                colorScheme="secondary"
+                size="md"
+                isFullWidth={true}
+                textAlign="center"
+            onClick={onClose}
+          >
+            취소
               </Button>
             </Frame>
           </Frame>

@@ -267,8 +267,9 @@ export default function ShopModal({ shop, floor, onClose }: ShopModalProps) {
                     variant="filled"
                     colorScheme="primary"
                     size="lg"
+                    isFullWidth={true}
+                    textAlign="center"
                     onClick={() => shop.menuLinkUrl && window.open(shop.menuLinkUrl, '_blank')}
-                    style={{ width: "100%" }}
                   >
                     메뉴 보기
                   </Button>
