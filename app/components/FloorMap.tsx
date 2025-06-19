@@ -619,27 +619,23 @@ export default function FloorMap({ isAdminPage = false }: FloorMapProps) {
       >
         <Frame flex="1" />
         {selectedShop && isDrawerClosed && !isAdminPage && (
-          <button
+          <Button
+            variant="outlined"
+            colorScheme="secondary"
+            size="sm"
             onClick={() => setIsDrawerClosed(false)}
             style={{
               position: "fixed",
               left: 0,
-              background: "var(--card-bg)",
-              border: "none",
-              borderRight: "1px solid var(--border-color)",
-              padding: "8px 16px",
-              cursor: "pointer",
-              boxShadow: "2px 0 8px rgba(0,0,0,0.1)",
               zIndex: 998,
               display: "flex",
               alignItems: "center",
               gap: "8px",
-              color: "var(--text-color)",
             }}
           >
             <span>{selectedShop.name}</span>
             <span>▶</span>
-          </button>
+          </Button>
         )}
         <Frame display="flex" gap="xs" align="center">
           <SegmentButton

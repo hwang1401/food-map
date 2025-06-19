@@ -177,11 +177,7 @@ function FilterBottomSheet({ isOpen, onClose, filters, onFilterChange }: FilterB
                       launch: !filters.launch
                     });
                   }}
-                  style={{
-                    borderRadius: "20px",
-                    paddingLeft: "16px",
-                    paddingRight: "16px",
-                  }}
+                  borderRadius="lg"
                 >
                   점심
                 </Button>
@@ -195,11 +191,7 @@ function FilterBottomSheet({ isOpen, onClose, filters, onFilterChange }: FilterB
                       dinner: !filters.dinner
                     });
                   }}
-                  style={{
-                    borderRadius: "20px",
-                    paddingLeft: "16px",
-                    paddingRight: "16px",
-                  }}
+                  borderRadius="lg"
                 >
                   석식
                 </Button>
@@ -364,7 +356,7 @@ export default function ShopList({
               showImage={true}
               showActionButton={false}
               imageHeight="150px"
-              imageObjectFit="cover"
+              imageObjectFit="contain"
               imageAspectRatio="square"
               size="sm"
               onClick={() => onShopSelect(shop)}

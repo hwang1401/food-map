@@ -73,47 +73,79 @@ export default function ShopInfo({ shop, onClose, isClosed }: ShopInfoProps) {
       >
         <Surface
           background="secondary-system02-1-rest"
-          style={{
-            height: "100%",
-            boxShadow: "2px 0 8px rgba(0,0,0,0.1)",
-          }}
+          borderColor="secondary-system02-2-rest"
+          borderWidth="thin"
+          borderStyle="solid"
+          borderRadius="sm"
+          boxShadow="10"
         >
           <Frame
-            padding="xl"
             display="flex"
             direction="column"
-            height="100%"
+            height="100vh"
+            overflow="hidden"
           >
             {/* 헤더 */}
             <Frame
               display="flex"
               justify="space-between"
               align="center"
-              marginBottom="xl"
-        >
-              <TextDisplay
-                size="md"
-                primaryText={shop.name}
-              />
-              <Button
-                variant="transparent"
-                colorScheme="secondary"
-                size="sm"
-            onClick={handleClose}
-          >
-            ✕
-              </Button>
+              padding="md"
+              style={{
+                borderBottom: "1px solid var(--secondary-system02-2-rest)"
+              }}
+            >
+              <Frame display="flex" align="center" gap="sm">
+                <Frame>
+                  <Image
+                    src={shop.logoUrl || "/icon-192x192.png"}
+                    alt={shop.name}
+                    width={32}
+                    height={32}
+                    style={{ borderRadius: "6px" }}
+                  />
+                </Frame>
+                <Frame>
+                  <TextDisplay
+                    size="lg"
+                    primaryText={shop.name}
+                  />
+                  <TextDisplay
+                    size="sm"
+                    primaryText={shop.floor === "floor1" ? "1층" : "2층"}
+                  />
+                </Frame>
+              </Frame>
+              
+              <Frame display="flex" gap="sm">
+                <Button
+                  variant="outlined"
+                  colorScheme="secondary"
+                  size="sm"
+                  onClick={handleClose}
+                >
+                  {isClosed ? "열기" : "접기"}
+                </Button>
+                <Button
+                  variant="outlined"
+                  colorScheme="secondary"
+                  size="sm"
+                  onClick={onClose}
+                >
+                  ✕
+                </Button>
+              </Frame>
             </Frame>
 
             {/* 상점 정보 */}
             <Frame marginBottom="xl">
-          <Image
-            src={shop.logoUrl || "/icon-192x192.png"}
-            alt={shop.name}
-            width={120}
-            height={120}
-            style={{ borderRadius: "12px", marginBottom: "16px" }}
-          />
+              <Image
+                src={shop.logoUrl || "/icon-192x192.png"}
+                alt={shop.name}
+                width={120}
+                height={120}
+                style={{ borderRadius: "12px", marginBottom: "16px" }}
+              />
               <TextDisplay
                 size="md"
                 primaryText={shop.description}
@@ -156,139 +188,143 @@ export default function ShopInfo({ shop, onClose, isClosed }: ShopInfoProps) {
               </Surface>
               
               {/* 간단한 지도 표시 */}
-              <Frame
+              <Surface
+                background="secondary-system02-2-rest"
                 style={{
-                  position: "relative",
-                  width: "100%",
-                  height: "180px",
-                  overflow: "hidden",
-                  borderRadius: "8px",
-                  border: "1px solid var(--secondary-system02-2-rest)",
+                  boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)"
                 }}
               >
-                {/* 지도 상단에 식당 정보 오버레이 */}
                 <Frame
-                  position="absolute"
-                  top="8px"
-                  left="8px"
-                  right="8px"
-                  zIndex={10}
+                  position="relative"
+                  width="100%"
+                  height="180px"
                 >
-                  <Surface
-                    background="secondary-system02-1-rest"
-                    borderRadius="sm"
+                  {/* 지도 상단에 식당 정보 오버레이 */}
+                  <Frame
+                    position="absolute"
+                    top="8px"
+                    left="8px"
+                    right="8px"
+                    zIndex={10}
+                  >
+                    <Surface
+                      background="secondary-system02-1-rest"
+                      style={{
+                        boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)"
+                      }}
+                    >
+                      <Frame
+                        display="flex"
+                        align="center"
+                        gap="sm"
+                        padding="sm"
+                      >
+                        <Frame>
+                          <Image
+                            src={shop.logoUrl || "/icon-192x192.png"}
+                            alt={shop.name}
+                            width={32}
+                            height={32}
+                            style={{ borderRadius: "6px" }}
+                          />
+                        </Frame>
+                        <Frame flex="1">
+                          <TextDisplay
+                            size="sm"
+                            primaryText={shop.name}
+                            style="left"
+                          />
+                          <TextDisplay
+                            size="sm"
+                            primaryText={shop.floor === "floor1" ? "1층" : "2층"}
+                            style="left"
+                          />
+                        </Frame>
+                      </Frame>
+                    </Surface>
+                  </Frame>
+                  <svg
+                    viewBox="0 0 1000 800"
                     style={{
-                      boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-                      opacity: 0.95,
+                      width: "100%",
+                      height: "100%",
+                      background: "#f8f9fa",
                     }}
                   >
-                    <Frame
-                      display="flex"
-                      align="center"
-                      gap="sm"
-                      padding="sm"
-                    >
-                      <Image
-                        src={shop.logoUrl || "/icon-192x192.png"}
-                        alt={shop.name}
-                        width={32}
-                        height={32}
-                        style={{ borderRadius: "6px" }}
-                      />
-                      <Frame flex="1">
-                        <TextDisplay
-                          size="sm"
-                          primaryText={shop.name}
-                          style="left"
-                        />
-                        <TextDisplay
-                          size="sm"
-                          primaryText={shop.floor === "floor1" ? "1층" : "2층"}
-                          style="left"
-                        />
-                      </Frame>
-                    </Frame>
-                  </Surface>
+                    <image
+                      href={shop.floor === "floor1" ? "/floor1-1.png" : "/floor2-1.png"}
+                      width="1000"
+                      height="800"
+                      preserveAspectRatio="xMidYMid meet"
+                      opacity="0.7"
+                    />
+                    {/* 선택된 식당 하이라이트 */}
+                    <polygon
+                      points={shop.points}
+                      fill="rgba(37, 99, 235, 0.4)"
+                      stroke="#2563eb"
+                      strokeWidth="3"
+                    />
+                    {/* 식당 위치 인디케이터 */}
+                    {(() => {
+                      const pointsArr = shop.points.split(" ").map((pt) => {
+                        const [x, y] = pt.split(",").map(Number);
+                        return { x, y };
+                      });
+                      const centerX = (pointsArr[0].x + pointsArr[2].x) / 2;
+                      const centerY = (pointsArr[0].y + pointsArr[2].y) / 2;
+                      const arrowX = (pointsArr[0].x + pointsArr[1].x) / 2;
+                      const arrowY = Math.min(pointsArr[0].y, pointsArr[1].y) - 14;
+                      
+                      return (
+                        <g>
+                          {/* 식당 로고 */}
+                          <image
+                            href={shop.logoUrl || "/icon-192x192.png"}
+                            x={centerX - 15}
+                            y={centerY - 15}
+                            width={30}
+                            height={30}
+                          />
+                          {/* 위치 인디케이터 화살표 */}
+                          <text
+                            x={arrowX}
+                            y={arrowY}
+                            textAnchor="middle"
+                            fontSize="36"
+                            fontWeight="bold"
+                            fill="#e11d48"
+                            style={{
+                              animation: "bounce 1s infinite alternate",
+                            }}
+                          >
+                            ▼
+                          </text>
+                        </g>
+                      );
+                    })()}
+                  </svg>
+                  
+                  {/* CSS 애니메이션 추가 */}
+                  <style jsx>{`
+                    @keyframes bounce {
+                      0% { transform: translateY(0); }
+                      100% { transform: translateY(8px); }
+                    }
+                  `}</style>
                 </Frame>
-                <svg
-                  viewBox="0 0 1000 800"
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    background: "#f8f9fa",
-                  }}
-                >
-                  <image
-                    href={shop.floor === "floor1" ? "/floor1-1.png" : "/floor2-1.png"}
-                    width="1000"
-                    height="800"
-                    preserveAspectRatio="xMidYMid meet"
-                    opacity="0.7"
-                  />
-                  {/* 선택된 식당 하이라이트 */}
-                  <polygon
-                    points={shop.points}
-                    fill="rgba(37, 99, 235, 0.4)"
-                    stroke="#2563eb"
-                    strokeWidth="3"
-                  />
-                  {/* 식당 위치 인디케이터 */}
-                  {(() => {
-                    const pointsArr = shop.points.split(" ").map((pt) => {
-                      const [x, y] = pt.split(",").map(Number);
-                      return { x, y };
-                    });
-                    const centerX = (pointsArr[0].x + pointsArr[2].x) / 2;
-                    const centerY = (pointsArr[0].y + pointsArr[2].y) / 2;
-                    const arrowX = (pointsArr[0].x + pointsArr[1].x) / 2;
-                    const arrowY = Math.min(pointsArr[0].y, pointsArr[1].y) - 14;
-                    
-                    return (
-                      <g>
-                        {/* 식당 로고 */}
-                        <image
-                          href={shop.logoUrl || "/icon-192x192.png"}
-                          x={centerX - 15}
-                          y={centerY - 15}
-                          width={30}
-                          height={30}
-                        />
-                        {/* 위치 인디케이터 화살표 */}
-                        <text
-                          x={arrowX}
-                          y={arrowY}
-                          textAnchor="middle"
-                          fontSize="36"
-                          fontWeight="bold"
-                          fill="#e11d48"
-                          style={{
-                            animation: "bounce 1s infinite alternate",
-                          }}
-                        >
-                          ▼
-                        </text>
-                      </g>
-                    );
-                  })()}
-                </svg>
-                
-                {/* CSS 애니메이션 추가 */}
-                <style jsx>{`
-                  @keyframes bounce {
-                    0% { transform: translateY(0); }
-                    100% { transform: translateY(8px); }
-                  }
-                `}</style>
-              </Frame>
+              </Surface>
             </Frame>
 
             {/* 메뉴 섹션 */}
             <Frame display="flex" direction="column" gap="md" flex="1">
               <Surface
-                borderColor="secondary-system02-2-rest"
-                borderWidth="medium"
-                borderStyle="solid"
-                style={{ borderTop: "none", borderLeft: "none", borderRight: "none" }}
+                style={{
+                  borderTop: "none", 
+                  borderLeft: "none", 
+                  borderRight: "none",
+                  borderBottom: "1px solid var(--secondary-system02-2-rest)"
+                }}
               >
                 <Frame paddingBottom="xs" marginBottom="xs">
                   <TextDisplay
@@ -298,7 +334,7 @@ export default function ShopInfo({ shop, onClose, isClosed }: ShopInfoProps) {
                 </Frame>
               </Surface>
               
-          {shop.menuList && shop.menuList.length > 0 && (
+              {shop.menuList && shop.menuList.length > 0 && (
                 <Frame
                   display="flex"
                   direction="column"
@@ -307,17 +343,17 @@ export default function ShopInfo({ shop, onClose, isClosed }: ShopInfoProps) {
                   flex="1"
                   overflowY="auto"
                   style={{ height: "calc(100vh - 450px)" }}
-            >
-              {shop.menuList.map((menu) => (
+                >
+                  {shop.menuList.map((menu) => (
                     <Surface
-                  key={menu.name}
+                      key={menu.name}
                       background="secondary-system02-1-rest"
                       borderColor="secondary-system02-2-rest"
                       borderWidth="thin"
                       borderStyle="solid"
                       borderRadius="sm"
-                      style={{ boxShadow: "0 2px 4px rgba(0, 0, 0, 0.05)" }}
-                >
+                      boxShadow="10"
+                    >
                       <Frame
                         display="flex"
                         justify="space-between"
@@ -334,23 +370,23 @@ export default function ShopInfo({ shop, onClose, isClosed }: ShopInfoProps) {
                         />
                       </Frame>
                     </Surface>
-              ))}
+                  ))}
                 </Frame>
-          )}
+              )}
               
-          {shop.menuLinkUrl && (
+              {shop.menuLinkUrl && (
                 <Frame>
                   <Button
                     variant="filled"
                     colorScheme="primary"
                     size="lg"
                     onClick={() => shop.menuLinkUrl && window.open(shop.menuLinkUrl, '_blank')}
-                    style={{ width: "100%" }}
-            >
-              메뉴 보기
+                    isFullWidth={true}
+                  >
+                    메뉴 보기
                   </Button>
                 </Frame>
-          )}
+              )}
             </Frame>
           </Frame>
         </Surface>

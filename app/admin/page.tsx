@@ -1,6 +1,6 @@
 "use client";
 
-import { Frame } from "lumir-design-system-shared";
+import { Frame, Surface } from "lumir-design-system-shared";
 import { DynamicTextDisplay as TextDisplay, DynamicButton as Button } from "../components/DynamicComponents";
 import { useRouter } from "next/navigation";
 import { useTheme } from "../components/ThemeProvider";
@@ -64,26 +64,25 @@ export default function AdminPage() {
       </Frame>
 
       {/* 안내 메시지 */}
-      <Frame
-        style={{
-          backgroundColor: "var(--secondary-system02-2-rest)",
-          borderRadius: "8px",
-          border: "1px solid var(--secondary-system02-2-rest)",
-          padding: "16px",
-          marginBottom: "24px"
-        }}
+      <Surface
+        background="secondary-system02-2-rest"
       >
-        <TextDisplay
-          size="md"
-          primaryText="맵에서 영역을 클릭하여 새로운 식당을 추가할 수 있습니다."
-        />
-      </Frame>
+        <Frame
+          padding="lg"
+          marginBottom="xl"
+        >
+          <TextDisplay
+            size="md"
+            primaryText="맵에서 영역을 클릭하여 새로운 식당을 추가할 수 있습니다."
+          />
+        </Frame>
+      </Surface>
 
       {/* 플로어맵 컴포넌트 */}
       <Frame
         height="calc(100vh - 200px)"
         width="100%"
-        style={{ overflow: "hidden" }}
+        overflow="hidden"
       >
         <FloorMap isAdminPage={true} />
       </Frame>

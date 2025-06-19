@@ -34,19 +34,19 @@ export default function ShopModal({ shop, floor, onClose }: ShopModalProps) {
   return (
     <>
       {/* 배경 딤 */}
-      <Frame
-        position="fixed"
-        top="0"
-        left="0"
-        right="0"
-        bottom="0"
-        zIndex={999}
-        onClick={handleClose}
+      <Surface
+        overlay="heavy"
         style={{
-          background: "rgba(0, 0, 0, 0.5)",
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          zIndex: 999,
           opacity: isVisible ? (isClosing ? 0 : 1) : 0,
           transition: "opacity 0.3s ease-in-out",
         }}
+        onClick={handleClose}
       />
 
       {/* 바텀시트 모달 */}
@@ -68,13 +68,16 @@ export default function ShopModal({ shop, floor, onClose }: ShopModalProps) {
         }}
       >
         <Surface
-          background="secondary-system02-1-rest"
+          background="secondary-system02-3-rest"
           borderRadius="lg"
+          borderColor="secondary-system02-2-rest"
+          borderWidth="thin"
+          borderStyle="solid"
+          boxShadow="30"
           style={{
             height: "100%",
             borderBottomLeftRadius: 0,
-            borderBottomRightRadius: 0,
-            boxShadow: "0 -4px 20px rgba(0,0,0,0.15)",
+            borderBottomRightRadius: 0
           }}
         >
           <Frame
@@ -105,85 +108,88 @@ export default function ShopModal({ shop, floor, onClose }: ShopModalProps) {
             </Frame>
 
             {/* 지도 영역 */}
-            <Frame
-              marginBottom="lg"
-              height="300px"
+            <Surface
+              background="secondary-system02-2-rest"
+              borderRadius="md"
               style={{
-                borderRadius: "8px",
-                overflow: "hidden",
-                border: "1px solid var(--secondary-system02-2-rest)",
+                overflow: "hidden"
               }}
             >
-              <svg
-                viewBox="0 0 1000 800"
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  background: "#f8f9fa",
-                }}
+              <Frame
+                height="300px"
+                marginBottom="lg"
               >
-                <image
-                  href={shop.floor === "floor1" ? "/floor1-1.png" : "/floor2-1.png"}
-                  width="1000"
-                  height="800"
-                  preserveAspectRatio="xMidYMid meet"
-                  opacity="0.7"
-                />
-                {/* 선택된 식당 하이라이트 */}
-                <polygon
-                  points={shop.points}
-                  fill="rgba(37, 99, 235, 0.4)"
-                  stroke="#2563eb"
-                  strokeWidth="3"
-                />
-                {/* 식당 위치 인디케이터 */}
-                {(() => {
-                  const pointsArr = shop.points.split(" ").map((pt) => {
-                    const [x, y] = pt.split(",").map(Number);
-                    return { x, y };
-                  });
-                  const centerX = (pointsArr[0].x + pointsArr[2].x) / 2;
-                  const centerY = (pointsArr[0].y + pointsArr[2].y) / 2;
-                  const arrowX = (pointsArr[0].x + pointsArr[1].x) / 2;
-                  const arrowY = Math.min(pointsArr[0].y, pointsArr[1].y) - 14;
-                  
-                  return (
-                    <g>
-                      {/* 식당 로고 */}
-                      <image
-                        href={shop.logoUrl || "/icon-192x192.png"}
-                        x={centerX - 15}
-                        y={centerY - 15}
-                        width={30}
-                        height={30}
-                      />
-                      {/* 위치 인디케이터 화살표 */}
-                      <text
-                        x={arrowX}
-                        y={arrowY}
-                        textAnchor="middle"
-                        fontSize="36"
-                        fontWeight="bold"
-                        fill="#e11d48"
-                        style={{
-                          animation: "bounce 1s infinite alternate",
-                        }}
-                      >
-                        ▼
-                      </text>
-                    </g>
-                  );
-                })()}
-              </svg>
-              
-              {/* CSS 애니메이션 추가 */}
-              <style jsx>{`
-                @keyframes bounce {
-                  0% { transform: translateY(0); }
-                  100% { transform: translateY(8px); }
-                }
-              `}</style>
-            </Frame>
+                <svg
+                  viewBox="0 0 1000 800"
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    background: "#f8f9fa",
+                  }}
+                >
+                  <image
+                    href={shop.floor === "floor1" ? "/floor1-1.png" : "/floor2-1.png"}
+                    width="1000"
+                    height="800"
+                    preserveAspectRatio="xMidYMid meet"
+                    opacity="0.7"
+                  />
+                  {/* 선택된 식당 하이라이트 */}
+                  <polygon
+                    points={shop.points}
+                    fill="rgba(37, 99, 235, 0.4)"
+                    stroke="#2563eb"
+                    strokeWidth="3"
+                  />
+                  {/* 식당 위치 인디케이터 */}
+                  {(() => {
+                    const pointsArr = shop.points.split(" ").map((pt) => {
+                      const [x, y] = pt.split(",").map(Number);
+                      return { x, y };
+                    });
+                    const centerX = (pointsArr[0].x + pointsArr[2].x) / 2;
+                    const centerY = (pointsArr[0].y + pointsArr[2].y) / 2;
+                    const arrowX = (pointsArr[0].x + pointsArr[1].x) / 2;
+                    const arrowY = Math.min(pointsArr[0].y, pointsArr[1].y) - 14;
+                    
+                    return (
+                      <g>
+                        {/* 식당 로고 */}
+                        <image
+                          href={shop.logoUrl || "/icon-192x192.png"}
+                          x={centerX - 15}
+                          y={centerY - 15}
+                          width={30}
+                          height={30}
+                        />
+                        {/* 위치 인디케이터 화살표 */}
+                        <text
+                          x={arrowX}
+                          y={arrowY}
+                          textAnchor="middle"
+                          fontSize="36"
+                          fontWeight="bold"
+                          fill="#e11d48"
+                          style={{
+                            animation: "bounce 1s infinite alternate",
+                          }}
+                        >
+                          ▼
+                        </text>
+                      </g>
+                    );
+                  })()}
+                </svg>
+                
+                {/* CSS 애니메이션 추가 */}
+                <style jsx>{`
+                  @keyframes bounce {
+                    0% { transform: translateY(0); }
+                    100% { transform: translateY(8px); }
+                  }
+                `}</style>
+              </Frame>
+            </Surface>
 
             {/* 상점 정보 */}
             <Frame
@@ -195,13 +201,33 @@ export default function ShopModal({ shop, floor, onClose }: ShopModalProps) {
             >
               {/* 상점 기본 정보 */}
               <Frame display="flex" gap="md" align="flex-start">
-                <Image
-                  src={shop.logoUrl || "/icon-192x192.png"}
-                  alt={shop.name}
-                  width={80}
-                  height={80}
-                  style={{ borderRadius: "8px" }}
-                />
+                <Surface
+                  background="secondary-system02-2-rest"
+                  borderRadius="md"
+                  style={{
+                    width: "80px",
+                    height: "80px",
+                    overflow: "hidden"
+                  }}
+                >
+                  <Frame
+                    width="100%"
+                    height="100%"
+                    display="flex"
+                    align="center"
+                    justify="center"
+                  >
+                    <Image
+                      src={shop.logoUrl || "/icon-192x192.png"}
+                      alt={shop.name}
+                      width={80}
+                      height={80}
+                      style={{ 
+                        objectFit: "contain"
+                      }}
+                    />
+                  </Frame>
+                </Surface>
                 <Frame flex="1">
                   <TextDisplay
                     size="md"
@@ -268,7 +294,6 @@ export default function ShopModal({ shop, floor, onClose }: ShopModalProps) {
                     colorScheme="primary"
                     size="lg"
                     isFullWidth={true}
-                    textAlign="center"
                     onClick={() => shop.menuLinkUrl && window.open(shop.menuLinkUrl, '_blank')}
                   >
                     메뉴 보기
