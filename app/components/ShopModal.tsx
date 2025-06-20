@@ -32,32 +32,27 @@ export default function ShopModal({ shop, floor, onClose }: ShopModalProps) {
   };
 
   return (
-    <>
-      {/* 배경 딤 */}
-      <Surface
-        overlay="heavy"
-        style={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          zIndex: 999,
-          opacity: isVisible ? (isClosing ? 0 : 1) : 0,
-          transition: "opacity 0.3s ease-in-out",
-        }}
-        onClick={handleClose}
-      />
-
+    <Frame
+      position="fixed"
+      top="0"
+      left="0"
+      width="100vw"
+      height="100vh"
+      display="flex"
+      align="flex-end"
+      justify="center"
+      zIndex={999}
+      style={{
+        background: `rgba(0, 0, 0, ${isVisible ? (isClosing ? 0 : 0.5) : 0})`,
+        opacity: isVisible ? 1 : 0,
+        transition: "all 0.3s ease-in-out",
+      }}
+      onClick={handleClose}
+    >
       {/* 바텀시트 모달 */}
       <Frame
-        position="fixed"
-        left="0"
-        right="0"
-        bottom="0"
         width="100%"
         height="80vh"
-        zIndex={1000}
         style={{
           transform: isVisible
             ? isClosing
@@ -66,6 +61,7 @@ export default function ShopModal({ shop, floor, onClose }: ShopModalProps) {
             : "translateY(100%)",
           transition: "transform 0.3s ease-in-out",
         }}
+        onClick={(e) => e.stopPropagation()}
       >
         <Surface
           background="secondary-system02-3-rest"
@@ -85,6 +81,7 @@ export default function ShopModal({ shop, floor, onClose }: ShopModalProps) {
             direction="column"
             height="100%"
             padding="xl"
+            onClick={(e) => e.stopPropagation()}
           >
             {/* 헤더 */}
             <Frame
@@ -304,6 +301,6 @@ export default function ShopModal({ shop, floor, onClose }: ShopModalProps) {
           </Frame>
         </Surface>
       </Frame>
-    </>
+    </Frame>
   );
 } 
